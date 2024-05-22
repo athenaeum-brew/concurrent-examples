@@ -1,7 +1,3 @@
-import java.io.Closeable;
-import java.io.IOException;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -9,91 +5,41 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.IntStream;
 
 public class Example30Atomic {
-    static public final int iterations = 1_000_000;
 
-    public static void main(String[] args) throws InterruptedException, IOException {
+    static class Holder {
+        int i = 0;
+        AtomicInteger atomicInteger = new AtomicInteger(0);
+        long accrual = 0;
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        Holder holder = new Holder();
+        int iterations = 100_000;
+        long iterations_as_long = iterations;
+        long expected = iterations_as_long * (iterations_as_long + 1) / 2L;
         int cpus = Runtime.getRuntime().availableProcessors();
 
-        try (Incrementor incrementor = new BasicIncrementor();
-                ExecutorService service = Executors.newFixedThreadPool(cpus)) {
+        ExecutorService service = Executors.newFixedThreadPool(cpus);
 
-            IntStream.range(0, iterations).forEach(count -> service.submit(incrementor::increment));
+        IntStream.range(0, iterations)
+                .forEach(c -> service.submit(() -> {
+                    synchronized (holder) {
+                        holder.accrual += holder.atomicInteger.incrementAndGet();
+                    }
+                    ++holder.i;
+                }));
 
-            service.shutdown();
-            service.awaitTermination(10, TimeUnit.SECONDS);
-        }
+        service.shutdown();
+        service.awaitTermination(10, TimeUnit.SECONDS);
 
+        System.out.println(String.format("\n%14s: %14d\n%14s: %14d\n%14s: %14d\n%14s: %14d\n",
+                "int",
+                holder.i,
+                "atomicInteger",
+                holder.atomicInteger.get(),
+                "accrual",
+                holder.accrual,
+                "expected",
+                expected));
     }
-
-    static interface Incrementor extends Closeable {
-        int get();
-
-        void increment();
-    }
-
-    static class Spy {
-        final static Set<String> threadNames = ConcurrentHashMap.newKeySet();
-
-        final static String format = "\033[90m[%s]\033[0m %s ";
-
-        void spy(int i) {
-            if (threadNames.add(Thread.currentThread().getName())) {
-                System.out.println(String.format(format, Thread.currentThread().getName(), i));
-            }
-        }
-    }
-
-    static abstract class AbstractIncrementor extends Spy implements Incrementor {
-        final static String formatRed = "\033[31m%s\033[0m";
-        final static String formatGreen = "\033[32m%s\033[0m";
-
-        @Override
-        public void close() throws IOException {
-            if (get() == iterations) {
-                System.out.println(String.format(formatGreen, Integer.toString(get())));
-            } else {
-                System.out.println(String.format(formatRed, Integer.toString(get())));
-            }
-        }
-    }
-
-    static class BasicIncrementor extends AbstractIncrementor {
-        int sum = 0;
-
-        BasicIncrementor() {
-            System.out.println("\n" + this.getClass().getSimpleName());
-        }
-
-        @Override
-        public /* synchronized */ void increment() {
-            sum++;
-            spy(sum);
-        }
-
-        @Override
-        public int get() {
-            return sum;
-        }
-
-    }
-
-    static class AtomicIncrementor extends AbstractIncrementor {
-        private AtomicInteger sum = new AtomicInteger(0);
-
-        AtomicIncrementor() {
-            System.out.println("\n" + this.getClass().getSimpleName());
-        }
-
-        @Override
-        public void increment() {
-            int current = sum.getAndIncrement();
-            spy(current);
-        }
-
-        @Override
-        public int get() {
-            return sum.get();
-        }
-    }
-
 }
