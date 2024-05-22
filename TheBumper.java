@@ -1,4 +1,4 @@
-public class TheBumper {
+public final class TheBumper {
     private final String title = "\nA programmer had a problem. He thought to himself, \"I know, I'll solve it with threads!\".\n";
     private final String[] array = new String[] { "Now,", "he", "has", "two", "problems." };
     private int count = 0;
