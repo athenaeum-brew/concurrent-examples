@@ -2,7 +2,7 @@ import java.util.Date;
 import java.util.Random;
 import java.util.concurrent.CountDownLatch;
 
-public class Example03SyncAndAsyncWithLatches {
+public class Example04AsyncWithLatches {
     static Random r = new Random(new Date().getTime());
 
     static void async(final int n, CountDownLatch previous, CountDownLatch current) {
