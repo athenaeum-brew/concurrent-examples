@@ -1,11 +1,12 @@
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class Example12BumperSynchronized {
 
     final static String format = "\033[90m[%s]\033[0m %s ";
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         TheBumper bumper = new TheBumper();
         int nThreads = bumper.length();
         ExecutorService executor = Executors.newFixedThreadPool(nThreads);
@@ -22,9 +23,7 @@ public class Example12BumperSynchronized {
         }
 
         executor.shutdown();
-        while (!executor.isTerminated()) {
-            ; // Wait for all threads to finish
-        }
+        executor.awaitTermination(10, TimeUnit.SECONDS);
 
         System.out.println("");
     }

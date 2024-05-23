@@ -1,5 +1,6 @@
 import java.util.Date;
 import java.util.Random;
+import java.util.stream.IntStream;
 
 public class Example03AsyncLoopSleep {
 
@@ -13,12 +14,11 @@ public class Example03AsyncLoopSleep {
     }
 
     public static void main(String[] args) {
-        int c = 3;
-        while (c-- > 0) {
+        IntStream.range(0, 3).forEach(c -> {
             asyncTask(1);
             asyncTask(2);
             asyncTask(3);
-        }
+        });
     }
 
     static final Random r = new Random(new Date().getTime());
