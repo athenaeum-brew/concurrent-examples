@@ -21,7 +21,7 @@ public class Example40ReentrantLock {
     }
 
     public static void main(String[] args) throws InterruptedException {
-        final Lock lock = new ReentrantLock(true);
+        final Lock lock = new ReentrantLock();
 
         ExecutorService executor = Executors.newFixedThreadPool(6);
 

@@ -6,7 +6,7 @@ import java.util.concurrent.ThreadFactory;
 
 public class TheUtils {
     static final private Random r = new Random(new Date().getTime());
-    static final private String format = "\033[90m[%s] %s\033[0m %s ";
+    static final private String format = "\033[90m[%4s]%s\033[0m %s ";
     static final private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss.SSS");
 
     static void randomFreeze(int max) {
@@ -31,8 +31,8 @@ public class TheUtils {
 
     static void println(String s) {
         System.out.println(String.format(format,
-                Thread.currentThread().getName(),
-                "", // LocalTime.now().format(formatter),
+                s.startsWith(" ") ? "" : Thread.currentThread().getName(),
+                "", // " " + LocalTime.now().format(formatter),
                 s));
     }
 

@@ -19,6 +19,7 @@ public class Example41ReentrantLock {
             } finally {
                 lock.unlock();
             }
+            // Thread.yield();
             // TheUtils.randomFreeze(10);
         }
 
@@ -32,19 +33,19 @@ public class Example41ReentrantLock {
     public static void main(String[] args) throws InterruptedException {
         final boolean doLock = args.length > 0 ? Boolean.parseBoolean(args[0]) : true;
         final boolean fairness = args.length > 1 ? Boolean.parseBoolean(args[1]) : false;
-        final int nThreads = args.length > 2 ? Integer.parseInt(args[2]) : 6;
-        System.out.println(String.format("\nLock ...... %b\nFairness .. %b\nThreads ... %d\n",
+        final int nThreads = args.length > 2 ? Integer.parseInt(args[2]) : 4;
+        System.out.println(String.format("\nLock ...... %b\nFairness .. %s\nThreads ... %d\n",
                 doLock,
-                fairness,
+                doLock ? fairness : "n/a",
                 nThreads));
 
         final Lock lock = new ReentrantLock(fairness);
-        ExecutorService executor = Executors.newFixedThreadPool(nThreads);
+        ExecutorService executor = Executors.newFixedThreadPool(nThreads, new TheUtils.NamedThreadFactory());
 
         IntStream.range(0, nThreads).forEach(t -> {
             final Freezer f = new Freezer();
             executor.execute(() -> {
-                IntStream.range(0, 7).forEach(e -> {
+                IntStream.range(0, 3).forEach(e -> {
                     f.freeze(lock, !doLock);
                 });
             });
