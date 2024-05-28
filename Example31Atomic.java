@@ -14,7 +14,7 @@ public class Example31Atomic {
     public static void main(String[] args) throws InterruptedException, IOException {
         int cpus = Runtime.getRuntime().availableProcessors();
 
-        try (Incrementor incrementor = new AtomicIncrementor();
+        try (Incrementor incrementor = new BasicIncrementor();
                 ExecutorService service = Executors.newFixedThreadPool(cpus)) {
 
             IntStream.range(0, iterations).forEach(count -> service.submit(incrementor::increment));
@@ -65,7 +65,7 @@ public class Example31Atomic {
         }
 
         @Override
-        public /* synchronized */ void increment() {
+        public /* synchronized */  void increment() {
             sum++;
             spy(sum);
         }

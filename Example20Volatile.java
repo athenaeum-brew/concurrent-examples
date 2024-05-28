@@ -1,7 +1,7 @@
 public class Example20Volatile {
 
     static class Toggler {
-        private /*  */ volatile boolean flag = false;
+        private /* volatile */  boolean flag = false;
 
         public void toggleFlag() {
             flag = !flag;

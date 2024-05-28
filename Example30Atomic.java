@@ -14,7 +14,7 @@ public class Example30Atomic {
 
     public static void main(String[] args) throws InterruptedException {
         Holder holder = new Holder();
-        int iterations = 100_000;
+        int iterations = 1_000_000;
         long iterations_as_long = iterations;
         long expected = iterations_as_long * (iterations_as_long + 1) / 2L;
         int cpus = Runtime.getRuntime().availableProcessors();
@@ -25,8 +25,8 @@ public class Example30Atomic {
                 .forEach(c -> service.submit(() -> {
                     synchronized (holder) {
                         holder.accrual += holder.atomicInteger.incrementAndGet();
+                        ++holder.i;
                     }
-                    ++holder.i;
                 }));
 
         service.shutdown();
