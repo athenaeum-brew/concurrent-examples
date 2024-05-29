@@ -24,8 +24,8 @@ public class Example30Atomic {
         IntStream.range(0, iterations)
                 .forEach(c -> service.submit(() -> {
                     synchronized (holder) {
-                        holder.accrual += holder.atomicInteger.incrementAndGet();
-                        ++holder.i;
+                    holder.accrual += holder.atomicInteger.incrementAndGet();
+                    ++holder.i;
                     }
                 }));
 

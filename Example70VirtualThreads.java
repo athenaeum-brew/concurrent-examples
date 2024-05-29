@@ -3,7 +3,7 @@
    java --enable-preview Example60VirtualThreads
  */
 
-public class Example60VirtualThreads {
+public class Example70VirtualThreads {
 
     public static void main(String[] args) throws InterruptedException {
         // Create and start a virtual thread

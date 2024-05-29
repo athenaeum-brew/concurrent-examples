@@ -32,7 +32,7 @@ public class Example41ReentrantLock {
 
     public static void main(String[] args) throws InterruptedException {
         final boolean doLock = args.length > 0 ? Boolean.parseBoolean(args[0]) : true;
-        final boolean fairness = args.length > 1 ? Boolean.parseBoolean(args[1]) : false;
+        final boolean fairness = args.length > 1 ? Boolean.parseBoolean(args[1]) : true;
         final int nThreads = args.length > 2 ? Integer.parseInt(args[2]) : 4;
         System.out.println(String.format("\nLock ...... %b\nFairness .. %s\nThreads ... %d\n",
                 doLock,

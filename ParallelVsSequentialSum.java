@@ -41,7 +41,7 @@ public class ParallelVsSequentialSum {
     }
 
     static class SumTask extends RecursiveTask<Long> {
-        private static final int SEQUENTIAL_THRESHOLD = 1000;
+        private static final int SEQUENTIAL_THRESHOLD = 10_000_000;
         private int[] array;
         private int start;
         private int end;

@@ -65,7 +65,7 @@ public class Example31Atomic {
         }
 
         @Override
-        public /* synchronized */  void increment() {
+        public /*  */ synchronized void increment() {
             sum++;
             spy(sum);
         }

@@ -30,14 +30,14 @@ public class TheUtils {
 
     static void println(String s) {
         System.out.println(String.format(format,
-                s.startsWith(" ") ? "" : Thread.currentThread().getName(),
+                /* s.startsWith(" ") ? "" : */ Thread.currentThread().getName(),
                 "", // " " + LocalTime.now().format(formatter),
                 s));
     }
 
     static void lnprintln(String s) {
         System.out.println(String.format("\n" + format,
-                s.startsWith(" ") ? "" : Thread.currentThread().getName(),
+                /* s.startsWith(" ") ? "" : */ Thread.currentThread().getName(),
                 "", // " " + LocalTime.now().format(formatter),
                 s));
     }

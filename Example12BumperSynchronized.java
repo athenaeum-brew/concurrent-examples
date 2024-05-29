@@ -15,10 +15,12 @@ public class Example12BumperSynchronized {
 
         for (int i = 0; i < nThreads; i++) {
             executor.execute(() -> {
+                TheUtils.randomFreeze(10);
+                String qwe;
                 synchronized (bumper) {
-                    TheUtils.randomFreeze(10);
-                    System.out.println(String.format(format, Thread.currentThread().getName(), bumper.next()));
+                    qwe = bumper.next();
                 }
+                System.out.println(String.format(format, Thread.currentThread().getName(), qwe));
             });
         }
 
